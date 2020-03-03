@@ -6,27 +6,27 @@ Created on Thu Sep 27 14:45:19 2018
 """
 
 import pandas as pd
-import os
 
 # import basic contract info
-# basic = pd.read_excel(os.getcwd()+'\\data\\50ETF期权合约基本资料.xlsx', parse_date=True)
-basic = pd.read_excel(os.getcwd()+'\\data\\沪300ETF期权合约基本资料.xlsx', parse_date=True)
+# basic = pd.read_excel('C:\\Projects\\volatility\\data\\50ETF期权合约基本资料.xlsx', parse_date=True)
+basic = pd.read_excel('C:\\Projects\\volatility\\data\\沪300ETF期权合约基本资料.xlsx', parse_date=True)
 basic = basic.loc[:, ['trade_code', 'type', 'expire']]
 
 # import daily quotes
-# data2015 = pd.read_excel(os.getcwd()+'\\data\\50ETF期权日行情2015-2016.xlsx', parse_date=True)
-# data2017 = pd.read_excel(os.getcwd()+'\\data\\50ETF期权日行情2017-2018.xlsx', parse_date=True)
-# data2018 = pd.read_excel(os.getcwd()+'\\data\\50ETF期权日行情2018补.xlsx', parse_date=True)
-# data2019 = pd.read_excel(os.getcwd()+'\\data\\50ETF期权日行情2019.xlsx', parse_date=True)
-# data2020 = pd.read_excel(os.getcwd()+'\\data\\50ETF期权日行情2020.xlsx', parse_date=True)
+# data2015 = pd.read_excel('C:\\Projects\\volatility\\data\\50ETF期权日行情2015-2016.xlsx', parse_date=True)
+# data2017 = pd.read_excel('C:\\Projects\\volatility\\data\\50ETF期权日行情2017-2018.xlsx', parse_date=True)
+# data2018 = pd.read_excel('C:\\Projects\\volatility\\data\\50ETF期权日行情2018补.xlsx', parse_date=True)
+# data2019 = pd.read_excel('C:\\Projects\\volatility\\data\\50ETF期权日行情2019.xlsx', parse_date=True)
+# data2020 = pd.read_excel('C:\\Projects\\volatility\\data\\50ETF期权日行情2020.xlsx', parse_date=True)
 # data2015 = data2015.loc[:, ['date', 'trade_code', 'strike', 'settle']]
 # data2017 = data2017.loc[:, ['date', 'trade_code', 'strike', 'settle']]
 # data2018 = data2018.loc[:, ['date', 'trade_code', 'strike', 'settle']]
+# data2019 = data2019.loc[:, ['date', 'trade_code', 'strike', 'settle']]
 # data2020 = data2020.loc[:, ['date', 'trade_code', 'strike', 'settle']]
-# data = pd.concat([data2015, data2017, data2018, data2019, data2020])
+# data = pd.concat([data2015, data2017, data2018, data2019, data2020], sort=False)
 
 # import daily quotes(sse 300etf)
-data2020 = pd.read_excel(os.getcwd()+'\\data\\沪300ETF期权日行情2019-2020.xlsx', parse_date=True)
+data2020 = pd.read_excel('C:\\Projects\\volatility\\data\\沪300ETF期权日行情2019-2020.xlsx', parse_date=True)
 data2020 = data2020.loc[:, ['date', 'trade_code', 'strike', 'settle']]
 data = data2020
 
@@ -64,10 +64,12 @@ for i in range(len(last)):
         last.loc[last.index[i], 'last2'] = last.loc[last.index[i], 'last3']
 options = pd.merge(options, last, on='date', how='left')
 
-# options.to_excel(os.getcwd()+'\\data\\50ETF_option_VIX_2020.xlsx')
-options.to_excel(os.getcwd()+'\\data\\沪300ETF_option_VIX_2020.xlsx')
-data_file = os.getcwd()+'\\data\\market_300_2020.h5'
-shibor = pd.read_excel(os.getcwd()+'\\data\\shibor_3M.xlsx', index_col='date')
+# options.to_excel('C:\\Projects\\volatility\\data\\output\\50ETF_option_VIX_2020.xlsx')
+# data_file = 'C:\\Projects\\volatility\\data\\market_50_2020.h5'
+options.to_excel('C:\\Projects\\volatility\\data\\沪300ETF_option_VIX_2020.xlsx')
+data_file = 'C:\\Projects\\volatility\\data\\market_300_2020.h5'
+shibor = pd.read_excel('C:\\Projects\\volatility\\data\\shibor.xlsx', index_col='date')
 with pd.HDFStore(data_file) as store:
+    # store['SSE50ETF_option_VIX'] = options
     store['SSE300ETF_option_VIX'] = options
-    store['shibor_3M'] = shibor
+    store['shibor'] = shibor
